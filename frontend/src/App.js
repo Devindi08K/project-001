@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 
@@ -48,13 +48,28 @@ import GuideForm from './pages/admin/GuideForm';
 // Navigation component with conditional rendering based on auth state
 function Navigation() {
   const { user, isAdmin, logout } = useContext(AuthContext);
+  const [menuOpen, setMenuOpen] = useState(false);
   
   return (
     <header className="bg-primary text-white shadow-md">
       <div className="container mx-auto py-4 px-6">
-        <nav>
-          <ul className="flex flex-wrap items-center space-x-6 justify-between">
-            <li className="font-bold text-xl"><Link to="/">Sri Lanka Travel</Link></li>
+        <nav className="flex flex-col md:flex-row md:items-center md:gap-6">
+          <div className="flex items-center justify-between w-full">
+            <Link to="/" className="font-bold text-xl">Sri Lanka Travel</Link>
+            <button
+              type="button"
+              className="md:hidden focus:outline-none"
+              aria-label="Toggle navigation"
+              onClick={() => setMenuOpen((prev) => !prev)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+          <ul
+            className={`${menuOpen ? 'flex' : 'hidden'} list-none flex-col gap-4 w-full md:flex md:flex-row md:w-auto md:items-center md:gap-6 md:justify-end`}
+          >
             <li><Link to="/destinations">Destinations</Link></li>
             <li><Link to="/accommodations">Stay</Link></li>
             <li><Link to="/vehicles">Transport</Link></li>
@@ -66,13 +81,17 @@ function Navigation() {
             {/* Show these links only when user is logged in */}
             {user ? (
               <>
-                <li className="ml-auto">
+                <li>
                   {isAdmin && (
                     <Link to="/admin" className="bg-secondary text-dark px-3 py-1 rounded mr-4">
                       Admin Dashboard
                     </Link>
                   )}
+                </li>
+                <li>
                   <span className="mr-4">Welcome, {user.name}</span>
+                </li>
+                <li>
                   <button 
                     onClick={logout}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
@@ -83,9 +102,9 @@ function Navigation() {
               </>
             ) : (
               <>
-                <li className="ml-auto">
-                  <Link to="/login" className="mr-4">Login</Link>
-                  <Link to="/signup" className="bg-secondary text-dark px-3 py-1 rounded">
+                <li className="flex flex-wrap items-center gap-3 md:flex-nowrap">
+                  <Link to="/login">Login</Link>
+                  <Link to="/signup" className="bg-secondary text-dark px-3 py-1 rounded whitespace-nowrap">
                     Sign Up
                   </Link>
                 </li>

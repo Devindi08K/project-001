@@ -25,3 +25,33 @@ body {
     @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow;
   }
 }
+
+/* Leaflet map styles */
+.leaflet-container {
+  font-family: inherit;
+  /* Prevent map from interfering with page scroll on mobile */
+  touch-action: pan-x pan-y;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Improve mobile map interaction */
+@media (max-width: 768px) {
+  .leaflet-container {
+    /* Allow vertical scrolling on mobile when not actively using map */
+    touch-action: pan-y;
+  }
+
+  .leaflet-container:focus,
+  .leaflet-container:active {
+    /* Enable full map interaction when focused */
+    touch-action: none;
+  }
+}
